@@ -28,6 +28,15 @@ public class KnapsackSolver {
         this.equilibrium = equilibrium;
     }
     
+    /**
+     * Parse each line into vector, capacity, n and id.
+     * 9000 4 100 18 114 42 136 88 192 3 223 =>
+     * id = 9000
+     * n = 4
+     * capacity = 100
+     * items = [[18, 144], [42, 136], [88, 192], [3, 223]] (ArrayList of Items)
+     * @param line 
+     */
     private void parseLine(String line)
     {
         String [] data = line.split(" ");
@@ -36,8 +45,7 @@ public class KnapsackSolver {
         int capacity = Integer.parseInt(data[2]);
         
         knapsack = new Knapsack(id, n, capacity);
-        
-        
+                
         //parse items
         for(int i = 3; i < 2*n + 3; i+=2)
         {
@@ -46,6 +54,55 @@ public class KnapsackSolver {
             knapsack.addItem(new Item(weight, price));
         }
     }
+    
+    /**
+     * Solve knapsack problem by simulated annealing.
+     * @param line
+     * @return 
+     */
+    public int solve(String line)
+    {
+        parseLine(line);
+        // init state (empty knapsack)
+        state = new State(knapsack.getN(), knapsack.getItems());
+        bestSolution = new State(knapsack.getN(), knapsack.getItems());
+        
+        while(!frozen())
+        {
+            // stay on this temperature for a while (equilibrium)
+            for(int i = 0; equilibrium(i); i++)
+            {
+                // get (new) state
+                state = tryState();
+                // found better solution? Save it!
+                if(state.better(bestSolution)
+                        && (state.weight() <= knapsack.getCapacity()))
+                    bestSolution = state;
+            }
+            temperature = cool();
+        }
+        System.out.println(bestSolution.cost());
+        return bestSolution.cost();
+    }
+
+    private State tryState()
+    {
+        // get random number from <0, n-1>
+        int position = ThreadLocalRandom.current().nextInt(0, knapsack.getN());
+        State newState = new State(state);
+        
+        // get new configuration (switch one bit)
+        newState.toggleBit(position);
+        if(newState.better(state))
+            return newState;
+        
+        // newState still got change even if it is worse
+        int delta = newState.cost()-state.cost();
+        double x = (float)Math.random();
+        if(x < Math.pow(Math.E, ((double)delta/temperature)))
+            return newState;
+        return state;
+    }    
     
     private boolean frozen()
     {
@@ -60,42 +117,5 @@ public class KnapsackSolver {
     private double cool()
     {
         return temperature * a;
-    }
-    
-    private State tryState()
-    {
-        // get random number from <0, n-1>
-        int position = ThreadLocalRandom.current().nextInt(0, knapsack.getN());
-        State newState = new State(state);
-        newState.toggleBit(position);
-        if(newState.better(state))
-            return newState;
-        int delta = newState.cost()-state.cost();
-        double x = (float)Math.random();
-        if(x < Math.pow(Math.E, ((double)delta/temperature)))
-            return newState;
-        return state;
-    }
-    
-    public int solve(String line)
-    {
-        parseLine(line);
-        // init state (empty knapsack)
-        state = new State(knapsack.getN(), knapsack.getItems());
-        bestSolution = new State(knapsack.getN(), knapsack.getItems());
-        
-        while(!frozen())
-        {
-            for(int i = 0; equilibrium(i); i++)
-            {
-                state = tryState();
-                if(state.better(bestSolution)
-                        && (state.weight() <= knapsack.getCapacity()))
-                    bestSolution = state;
-            }
-            temperature = cool();
-        }
-        System.out.println(bestSolution.cost());
-        return bestSolution.cost();
     }
 }

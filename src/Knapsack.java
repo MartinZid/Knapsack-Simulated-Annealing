@@ -1,10 +1,8 @@
 
 import java.util.ArrayList;
 
-
-
 /**
- *
+ * Knapsack problem data.
  * @author Martin
  */
 public class Knapsack {

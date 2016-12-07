@@ -2,7 +2,7 @@
 import java.util.ArrayList;
 
 /**
- *
+ * State represents configuration.
  * @author Martin
  */
 public class State {
@@ -10,6 +10,11 @@ public class State {
     private ArrayList<Boolean> configuration;
     private final ArrayList<Item> items;
     
+    /**
+     * Constructor. Creates configuration of empty knapsack.
+     * @param n
+     * @param items 
+     */
     public State(int n, ArrayList<Item> items)
     {
         configuration = new ArrayList<>();
@@ -20,6 +25,10 @@ public class State {
         this.items = items;
     }
     
+    /**
+     * Copy constructor. Created deep copy of given state.
+     * @param state 
+     */
     public State(State state)
     {
         configuration = new ArrayList<>();
@@ -30,21 +39,29 @@ public class State {
         this.items = state.items;
     }
     
+    /**
+     * Switch bit value on position.
+     * @param position 
+     */
     public void toggleBit(int position)
     {
         configuration.set(position, !configuration.get(position));
     }
-
-    public ArrayList<Boolean> getConfiguration()
-    {
-        return configuration;
-    }
     
+    /**
+     * Compares two states.
+     * @param state
+     * @return 
+     */
     public boolean better(State state)
     {
         return cost() > state.cost();
     }
     
+    /**
+     * Count cost of this configuration.
+     * @return cost
+     */
     public int cost()
     {
         int cost = 0;
@@ -56,6 +73,10 @@ public class State {
         return cost;
     }
     
+    /**
+     * Counts weight of this configuration.
+     * @return weight
+     */
     public int weight()
     {
         int weight = 0;
@@ -66,4 +87,9 @@ public class State {
         }
         return weight;        
     }
+
+    public ArrayList<Boolean> getConfiguration()
+    {
+        return configuration;
+    }    
 }

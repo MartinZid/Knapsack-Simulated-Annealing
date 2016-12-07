@@ -10,7 +10,6 @@ import java.util.stream.Stream;
  */
 public class Main
 {
-
     /**
      * Reads file by lines and passes data to solver.
      * @param args the command line arguments
