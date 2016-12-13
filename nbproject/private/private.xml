@@ -3,11 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/src/State.java</file>
-            <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/src/KnapsackSolver.java</file>
+            <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/src/solver/State.java</file>
+            <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/src/tester/Tester.java</file>
+            <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/src/solver/Knapsack.java</file>
+            <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/src/solver/KnapsackSolver.java</file>
             <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/src/Main.java</file>
             <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/input/knap_4.inst.dat</file>
-            <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/src/Knapsack.java</file>
             <file>file:/C:/Users/Martin/Documents/NetBeansProjects/Knapsack04/solution/knap_4.sol.dat</file>
         </group>
     </open-files>

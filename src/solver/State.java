@@ -1,3 +1,5 @@
+package solver;
+
 
 import java.util.ArrayList;
 
@@ -7,7 +9,7 @@ import java.util.ArrayList;
  */
 public class State {
     
-    private ArrayList<Boolean> configuration;
+    private final ArrayList<Boolean> configuration;
     private final ArrayList<Item> items;
     
     /**
