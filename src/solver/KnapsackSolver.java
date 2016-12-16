@@ -2,6 +2,7 @@ package solver;
 
 
 import java.util.concurrent.ThreadLocalRandom;
+import tester.StatesCounter;
 
 /**
  * Solves knapsack problem with simulated annealing.
@@ -16,18 +17,23 @@ public class KnapsackSolver {
     private final int equilibrium;  // equilibrium coeficient
     /* ------------------------------------------------ */
     
+    private final StatesCounter counter;
+    private int id;
+    
     private State bestSolution;
     private double temperature;
     private Knapsack knapsack;
     private State state;
     
-    public KnapsackSolver(int startT, double a, double finalT, int equilibrium)
+    public KnapsackSolver(int startT, double a, double finalT, 
+            int equilibrium, StatesCounter counter)
     {
         this.temperature = startT;
         this.startT = startT;
         this.a = a;
         this.finalT = finalT;
         this.equilibrium = equilibrium;
+        this.counter = counter;
     }
     
     /**
@@ -42,7 +48,7 @@ public class KnapsackSolver {
     private void parseLine(String line)
     {
         String [] data = line.split(" ");
-        int id = Integer.parseInt(data[0]);
+        this.id = Integer.parseInt(data[0]);
         int n = Integer.parseInt(data[1]);
         int capacity = Integer.parseInt(data[2]);
         
@@ -69,11 +75,16 @@ public class KnapsackSolver {
         state = new State(knapsack.getN(), knapsack.getItems());
         bestSolution = new State(knapsack.getN(), knapsack.getItems());
         
+        if(id != 9550)
+            return 0;
+        
         while(!frozen())
         {
             // stay on this temperature for a while (equilibrium)
             for(int i = 0; equilibrium(i); i++)
             {
+                System.out.println(temperature + "\t" + state.cost());
+                counter.add();
                 // get (new) state
                 state = tryState();
                 // found better solution? Save it!
@@ -90,11 +101,15 @@ public class KnapsackSolver {
     private State tryState()
     {
         // get random number from <0, n-1>
-        int position = ThreadLocalRandom.current().nextInt(0, knapsack.getN());
-        State newState = new State(state);
+        State newState;
+        int position;
+        do {
+            position = ThreadLocalRandom.current().nextInt(0, knapsack.getN());
+            newState = new State(state);
+            // get new configuration (switch one bit)
+            newState.toggleBit(position);
+        } while(newState.weight() > knapsack.getCapacity());
         
-        // get new configuration (switch one bit)
-        newState.toggleBit(position);
         if(newState.better(state))
             return newState;
         
